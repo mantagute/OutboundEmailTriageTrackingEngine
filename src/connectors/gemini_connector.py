@@ -1,8 +1,13 @@
-"""Connector para a API do Google Gemini.
+"""Connector para a API do Google Gemini (Classificador Semântico sob Contrato).
+
+Conceitualmente, este módulo NÃO é um agente autônomo: o modelo não escolhe ferramentas,
+não controla o laço de execução e não tem poder de escrita sobre a planilha ou o Gmail.
+Ele atua como um tradutor semântico isolado atrás de um connector: recebe texto livre (a conversa),
+traduz em um JSON restrito pelo schema e devolve um dict cru para que o nosso domínio valide
+se a transição de estado é permitida.
 
 Guarda três coisas: qual modelo chamar, o tempo máximo de espera (TIMEOUT) e o desembrulho
-da resposta em dict. Não decide regra de negócio e não valida transição de status — quem
-decide o 'pode e não pode' sobre o retorno é o domínio/controller.
+da resposta em dict.
 """
 
 import json

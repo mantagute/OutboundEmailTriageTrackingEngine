@@ -193,6 +193,15 @@ flowchart TD
 * **Alternativa Descartada — PostgreSQL + API FastAPI + Dashboard Web:**
   * **Quando ela ganharia:** Se o sistema precisasse cruzar milhares de relacionamentos N:N entre campanhas, controlar permissões de acesso por linha ou auditar histórico de eventos (`status_event`) para múltiplos clientes externos (*multi-tenant*).
 
+### 4.4. Workflow Determinístico com Connector LLM vs. Agente de IA Autônomo (Tool-Calling)
+
+* **Opção Escolhida (Workflow Determinístico onde o código chama o LLM como Connector):**
+  * **Ganha:** Previsibilidade total de execução (no máximo 1 chamada ao Gemini por thread alterada, com `TIMEOUT = 15s`), custo controlado e blindagem contra *Prompt Injection* — como os e-mails vêm de remetentes externos desconhecidos, o LLM nunca recebe ferramentas (*tools*) para enviar e-mails ou editar a planilha diretamente; ele apenas devolve um JSON passivo que é validado pelo nosso domínio (`TriageDecision`).
+  * **Paga:** O sistema não toma ações criativas sozinho (como pesquisar o LinkedIn do destinatário ou redigir e enviar a resposta automaticamente).
+* **Alternativa Descartada — Agente Autônomo em Loop (ReAct / Tool-Calling):**
+  * **O preço real:** Dar autonomia para o LLM decidir quais funções chamar introduz risco de loops infinitos, estouro imprevisível de tokens e vulnerabilidade de segurança caso um e-mail externo contenha instruções maliciosas no corpo do texto.
+  * **Quando ela ganharia:** Em um assistente interativo de chat interno (onde o usuário que digita o comando é um funcionário autenticado da própria equipe pedindo tarefas variadas).
+
 ---
 
 ## 05. O que o Autor Precisa que o Time Decida
